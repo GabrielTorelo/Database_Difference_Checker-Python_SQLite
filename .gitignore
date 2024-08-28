@@ -4,7 +4,6 @@
 *$py.class
 
 # Local use
-MOCK/*
 Output.json
 
 # Distribution / packaging
