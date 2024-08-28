@@ -1,5 +1,6 @@
 from constants import TRACKING_CODE
 
+
 class Errors(Exception):
     def __init__(self, code: int, message: str):
         self.code = code
