@@ -25,9 +25,10 @@ Place the SQLite `(.db)` files you want to compare inside the `MOCK/DATA` folder
   ![image](https://github.com/user-attachments/assets/4d439483-bdcb-4bb4-aa0e-7f73a28ae0b6)
 
 ### 3. Adding the reference file
-Add the file with the reference data to the `MOCK/PATTERN` folder. **The reference file can be in `.txt`, `.json` or `.db` format**.
+Add the file with the reference data to the `MOCK/PATTERN` folder. **The reference file can be in `.txt`, `.json`, `.sqlite` or `.db` format**.
 
 ### **Important**
+- **The `.sqlite` and `.db` files take precedence over the others**
 - The file must follow the pattern **_key-value_** _(key: value)_, with the **VALUE ALWAYS WRAPPED IN BRACKETS**.
   #### Examples for text file `(.txt)`:
   - **Example 1 (without line break):**
@@ -104,6 +105,7 @@ Tracking codes indicate the status of the process:
 - `07`: **Error generating JSON from databases**
 - `08`: **Error when fetching JSON files from databases**
 - `09`: **Error creating reference JSON**
+- `10`: **Invalid file extension**
 
 ## 🛠 Used Packages
 
