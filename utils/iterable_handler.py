@@ -30,14 +30,14 @@ def compare_with_default(data_default: dict, data: dict) -> tuple:
                 missing_tables.append(table)
             else:
                 missing_columns = [
-                    col for col in schema if col not in data[table] and col['nome'] not in EXCLUDED_COLUMNS
+                    col for col in schema if col not in data[table] and col['name'] not in EXCLUDED_COLUMNS
                 ]
 
                 if missing_columns:
                     missing_data[table] = missing_columns
 
         missing_tables.sort()
-        missing_data = {table: sorted(columns, key=lambda x: x['nome']) for table, columns in sorted(missing_data.items())}
+        missing_data = {table: sorted(columns, key=lambda x: x['name']) for table, columns in sorted(missing_data.items())}
 
         return missing_tables, missing_data
     except Exception as e:

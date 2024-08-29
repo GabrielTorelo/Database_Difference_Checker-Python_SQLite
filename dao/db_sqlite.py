@@ -23,8 +23,8 @@ def list_tables(db_path):
             columns = cursor.fetchall()
 
             tables_info[table] = sorted([
-                {'nome': col[1], 'tipo': col[2]} for col in columns if col[1] not in EXCLUDED_COLUMNS
-            ], key=lambda x: x['nome'])
+                {'name': col[1], 'type': col[2]} for col in columns if col[1] not in EXCLUDED_COLUMNS
+            ], key=lambda x: x['name'])
         
         connection.close()
         return tables_info

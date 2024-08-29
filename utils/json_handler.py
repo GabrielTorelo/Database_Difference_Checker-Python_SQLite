@@ -1,6 +1,6 @@
-from re import DOTALL, findall
 from json import dump, load
 from os import listdir, makedirs, path, walk
+from typing import Callable
 from err import Errors
 from utils.iterable_handler import find_db_files
 from utils.response_handler import get_ok_response
@@ -51,36 +51,38 @@ def generate_json(multiple_files = False, multiple_db_files = False) -> str:
     except Exception as e:
         raise Errors(code=7, message=f"Error generating JSON file: {str(e)}")
 
-def create_json_from_data() -> None:
+def create_json_from_data(interpret_txt_file: Callable[[str], dict]) -> None:
     file_path = ""
     json_data = {}
+    sqlite_file = False
 
     try:
         for file in listdir(PATTERN_PATH):
-            if file.endswith('.txt'):
+            if file.endswith('.db') or file.endswith('.sqlite'):
                 file_path = path.join(PATTERN_PATH, file)
+                sqlite_file = True
                 break
 
-        with open(file_path, 'r', encoding='utf-8') as file:
-            data = file.read()
+        if not sqlite_file:
+            for file in listdir(PATTERN_PATH):
+                if file.endswith('.txt'):
+                    file_path = path.join(PATTERN_PATH, file)
+                    break
+        
+        if file_path == "":
+            raise Errors(code=10, message="No valid file found")
 
-        sections = findall(r'(\w+):\[(.*?)\]', data, DOTALL)
-
-        for section_name, section_content in sections:
-            entries = []
-            matches = findall(r'\{nome: (\w+), tipo: (\w+)\}', section_content)
-            for nome, tipo in matches:
-                entries.append({
-                    "nome": nome,
-                    "tipo": tipo
-                })
-            
-            json_data[section_name] = entries
+        if sqlite_file:
+            json_data = list_tables(file_path)
+        else:
+            json_data = interpret_txt_file(file_path)
 
         with open(PATTERN_PATH_JSON, 'w', encoding='utf-8') as json_file:
             dump(json_data, json_file, indent=4, ensure_ascii=False)
     except FileNotFoundError:
         raise Errors(code=3, message=f"Directory {file_path} not found")
+    except Errors as err:
+        raise err
     except Exception as e:
         raise Errors(code=9, message=f"Error processing data: {str(e)}")
 
