@@ -68,11 +68,11 @@ def create_json_from_data() -> None:
 
         for section_name, section_content in sections:
             entries = []
-            matches = findall(r'\{nome: (\w+), tipo: (\w+)\}', section_content)
-            for nome, tipo in matches:
+            matches = findall(r'\{name: (\w+), type: (\w+)\}', section_content)
+            for name, typ in matches:
                 entries.append({
-                    "nome": nome,
-                    "tipo": tipo
+                    "name": name,
+                    "type": typ
                 })
             
             json_data[section_name] = entries
